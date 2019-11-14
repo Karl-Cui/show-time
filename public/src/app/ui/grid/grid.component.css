@@ -1,0 +1,13 @@
+.card-img-top {
+  /* width: 30vw; */
+  height: 60vh;
+  object-fit: cover;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+.show-card {
+  padding-bottom: 30px;
+}

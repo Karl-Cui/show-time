@@ -1,0 +1,101 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link" [ngClass]="{'active': all===true}" (click)="selectAll()">All</a>
+  </li>
+  <li class="nav-item" *ngIf="getCheckUser()">
+    <a class="nav-link" [ngClass]="{'active': my_shows===true}" (click)="selectMy()">My Shows</a>
+  </li>
+  <li class="nav-item" *ngIf="getUser() && user.is_admin">
+    <a class="nav-link" [ngClass]="{'active': unapproved_shows===true}" (click)="selectUn()">Unapproved Shows</a>
+  </li>
+  <li class="nav-item justify-content-end">
+    <input class="form-control form-control-sm form-control-borderless" type="search" [(ngModel)]="search" placeholder="Search For a show">
+  </li>
+  <li class="nav-item justify-content-end">
+    <button class="btn btn-sm btn-info" (click)="getRegxShows()" type="submit">Search</button>
+  </li>
+  <li class="nav-item justify-content-end" *ngIf="getCheckUser()">
+    <button class="btn btn-sm btn-primary" routerLink="/addNewShow">Add New Show</button>
+  </li>
+</ul>
+<br>
+
+<div class="row justify-content-md-left card-deck" *ngIf="all">
+  <div class="show-card col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" *ngFor="let show of shows; ">
+    <div class="card">
+      <div class="card-header bg-primary text-light rounded"> {{show.title}} </div>
+      <a routerLink="show/{{show._id}}">
+        <img class="card-img-top" src="{{show.img}}" alt="Card image cap">
+        <div class="card-body">
+          <p class="card-text"> {{ show.description }} </p>
+          <div *ngIf="show.airDate != undefined && show.airInterval != undefined">
+            <span>Episode {{getNextEpisode(show)}} in </span>
+            <countdown [config]="{leftTime:getTimeRemaining(show)}"> $!d! days, $!h! hours and $!m! minutes</countdown>
+          </div>
+        </div>
+      </a>
+      <div class="card-footer" *ngIf="getCheckUser()">
+        <button class="btn btn-outline-primary text-primary d-block btn-block mx-auto" routerLink="editShow/{{show._id}}">Edit</button>
+        <button class="btn btn-outline-primary text-primary d-block btn-block mx-auto" (click)="addToMyShows(show._id)">Add To My Shows</button>
+      </div>
+    </div> <!-- //end card -->
+  </div> <!-- //end col -->
+
+  <div class="show-card col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" *ngFor="let show of myShows; ">
+    <div class="card">
+      <div class="card-header bg-primary text-light rounded"> {{show.title}} </div>
+      <a routerLink="show/{{show._id}}">
+        <img class="card-img-top" src="{{show.img}}" alt="Card image cap">
+        <div class="card-body">
+          <p class="card-text"> {{ show.description }} </p>
+          <div *ngIf="show.airDate != undefined && show.airInterval != undefined">
+            <span>Episode {{getNextEpisode(show)}} in </span>
+            <countdown [config]="{leftTime:getTimeRemaining(show)}"> $!d! days, $!h! hours and $!m! minutes</countdown>
+          </div>
+        </div>
+      </a>
+      <div class="card-footer" *ngIf="getCheckUser()">
+        <button class="btn btn-outline-primary text-primary d-block btn-block mx-auto" routerLink="editShow/{{show._id}}">Edit</button>
+        <button class="btn btn-outline-primary text-primary d-block btn-block mx-auto" (click)="removeFromMyShows(show._id)">Remove From My Shows</button>
+      </div>
+    </div> <!-- //end card -->
+  </div> <!-- //end col -->
+</div>
+
+<div class="row justify-content-md-center card-deck" *ngIf="my_shows">
+  <div class="show-card col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" *ngFor="let show of myShows; ">
+    <div class="card">
+      <div class="card-header bg-primary text-light rounded"> {{show.title}} </div>
+      <a routerLink="show/{{show._id}}">
+        <img class="card-img-top" src="{{show.img}}" alt="Card image cap">
+        <div class="card-body">
+          <!-- <h5 class="card-title">{{ show.title }}</h5> -->
+          <p class="card-text"> {{ show.description }} </p>
+          <div *ngIf="show.airDate != undefined && show.airInterval != undefined">
+            <span>Episode {{getNextEpisode(show)}} in </span>
+            <countdown [config]="{leftTime:getTimeRemaining(show)}"> $!d! days, $!h! hours and $!m! minutes</countdown>
+          </div>
+        </div>
+      </a>
+      <div class="card-footer" *ngIf="getCheckUser()">
+        <button class="btn btn-outline-primary text-primary d-block btn-block mx-auto" (click)="removeFromMyShows(show._id)">Remove From My Shows</button>
+      </div>
+    </div> <!-- //end card -->
+  </div> <!-- //end col -->
+</div> <!-- end row -->
+
+<div class="row justify-content-md-center card-deck " *ngIf="unapproved_shows">
+  <div class="show-card col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" *ngFor="let show of unapprovedShows; ">
+    <div class="card">
+      <div class="card-header bg-primary text-light rounded"> {{show.title}} </div>
+      <img class="card-img-top" src="{{show.img}}" alt="Card image cap">
+      <div class="card-body">
+        <p class="card-text"> {{ show.description }} </p>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-outline-success d-block btn-block mx-auto" (click)="approve(show._id)">Approve</button>
+        <button class="btn btn-outline-danger d-block btn-block mx-auto" (click)="reject(show._id)">Reject</button>
+      </div>
+    </div> <!-- //end card -->
+  </div> <!-- //end col -->
+</div>

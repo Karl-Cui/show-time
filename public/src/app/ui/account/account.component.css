@@ -1,0 +1,27 @@
+#account-info {
+  float: left;
+  /* width: 300px; */
+  width: 25%;
+  padding: 10px;
+}
+
+#bio-form {
+  height: 250px;
+}
+
+#change-account-info {
+  float: left;
+  /* width: 500px; */
+  width: 50%;
+  padding: 10px;
+}
+
+#profile-pic {
+  /* width: 270px;
+  height: 270px; */
+  width: 100%;
+  padding: 10px;
+  border-radius: 50%;
+	border-style: solid;
+	border-color: white;
+}

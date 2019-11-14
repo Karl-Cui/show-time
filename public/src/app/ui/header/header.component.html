@@ -1,0 +1,23 @@
+<nav class="navbar navbar-dark bg-dark mb-5">
+  <a class="navbar-brand" href="/">📺ShowTime</a>
+  <div class="navbar-expand mr-auto">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" routerLink="grid">Home</a>
+      <a *ngIf="setUser() && user.is_admin" class="nav-item nav-link" routerLink="adminuserlist">User List</a>
+    </div>
+  </div>
+  <div class="navbar-expand ml-auto navbar-nav">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" *ngIf="getCheckUser() && setUser()" routerLink="account">
+        {{user.username}}
+      </a>
+      <a class="nav-item nav-link" *ngIf="getCheckUser()" (click)="logOut()" routerLink="grid">
+        Log out
+      </a>
+      <a class="nav-item nav-link" *ngIf="!getCheckUser()" routerLink="login">Login</a>
+      <a class="nav-item nav-link" *ngIf="!getCheckUser()" routerLink="register">
+        Register
+      </a>
+    </div>
+  </div>
+</nav>

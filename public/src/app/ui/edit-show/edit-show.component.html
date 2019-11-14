@@ -1,0 +1,71 @@
+<div class="row justify-content-center">
+  <div *ngIf='show'>
+    <h1 *ngIf='show.title'>{{show.title}}</h1>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div id="edit-show">
+    <form (ngSubmit)="f.form.valid && submitEdits()" #f="ngForm">
+      <div class="form-group">
+        <label class="font-weight-bold" for="title"> Change title </label>
+        <input type="text" class="form-control" name="title" [(ngModel)]="updateShow.title" #description="ngModel">
+      </div>
+
+      <div class="form-group">
+        <label class="font-weight-bold" for="img"> Change display picture </label>
+        <br>
+        <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+        <!-- <input type="file" name="show-image" [(ngModel)]="updateShow.image" #username="ngModel" accept="image/*"> -->
+      </div>
+
+      <div class="form-group">
+        <label class="font-weight-bold" for="description"> Change description </label>
+        <textarea id="show-description" type="text" class="form-control" name="description" [(ngModel)]="updateShow.description" #description="ngModel">
+        </textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="font-weight-bold" for="link"> Change URL link </label>
+        <input type="text" class="form-control" name="link" [(ngModel)]="updateShow.link" #description="ngModel">
+      </div>
+
+      <div class="form-group">
+        <label for="link"><strong>Airing Date</strong></label>
+        <br>
+        <label for="hourSelect">Hour: </label>
+        <select class="form-control p-2" id="hourSelect" required [(ngModel)]="date.hour" name="hour">
+          <option *ngFor="let hour of hours">{{hour}}</option>
+        </select>
+        <br>
+        <label for="hourSelect">Day: </label>
+        <select class="form-control p-2" id="daySelect" required [(ngModel)]="date.day" name="day">
+          <option *ngFor="let day of days">{{day}}</option>
+        </select>
+        <br>
+        <label for="hourSelect">Month: </label>
+        <select class="form-control p-2" id="monthSelect" required [(ngModel)]="date.month" name="month">
+          <option *ngFor="let month of months">{{month}}</option>
+        </select>
+        <br>
+        <label for="hourSelect">Year: </label>
+        <select class="form-control p-2" id="yearSelect" required [(ngModel)]="date.year" name="year">
+          <option *ngFor="let year of years">{{year}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="interval">Airing Interval (Days)</label>
+        <input type="number" class="form-control" id="interval" required [(ngModel)]="updateShow.airInterval" name="airInterval">
+      </div>
+
+      <div>
+        <button type="submit" [disabled]="!f.form.valid" *ngIf="getCheckAdmin() && !popup" class="btn btn-primary shadow" (click)="uploader.uploadAll()">Submit changes</button>
+        <button type="submit" [disabled]="!f.form.valid" *ngIf="!getCheckAdmin() && !popup" class="btn btn-primary shadow" (click)="uploader.uploadAll()">Submit changes for review</button>
+        <button type="button" routerLink="/grid" (click)="resetEdits()" class="btn btn-primary shadow">Discard changes</button>
+      </div>
+      <p class="alert alert-success text-center" *ngIf="popup && !user.is_admin"> <strong>Your changes have been requested. Waiting for admin approval.</strong> </p>
+      <p class="alert alert-success text-center" *ngIf="popup && user.is_admin"> <strong>Saved Your Changes</strong> </p>
+    </form>
+  </div>
+</div>

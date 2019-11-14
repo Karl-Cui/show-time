@@ -1,0 +1,131 @@
+<div class="row">
+  <div class="col-lg-4">
+    <div class="card h-10">
+      <img class="card-img-top img-thumbnail" src="{{show.img}}" alt="Card image cap">
+    </div> <!-- //end card -->
+  </div>
+  <div class="col-lg-8">
+    <div class=" row card">
+      <div class="card-body">
+        <h1>{{show.title}}</h1>
+        <p class="card-text"> {{ show.description }} </p>
+        <div *ngIf="show.airDate != undefined && show.airInterval != undefined">
+          <span>Episode {{getNextEpisode(show)}} in </span>
+          <countdown [config]="{leftTime:getTimeRemaining(show)}"> $!d! days, $!h! hours and $!m! minutes</countdown>
+        </div>
+        <br>
+        <a href={{show.link}}>
+          <button href="#" class="btn btn-primary">Website Link</button>
+        </a>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Rating: {{ rating }} / 5</h5>
+        <p class="card-text"> number of ratings: {{ numberOfRatings }} </p>
+        <button class="btn btn-outline-success disabled">Completed: {{ status[0] }}</button>
+        <button class="btn btn-outline-primary disabled">Planning: {{ status[1] }}</button>
+        <button class="btn btn-outline-info disabled">Current: {{ status[2] }}</button>
+        <button class="btn btn-outline-warning disabled">Dropped: {{ status[3] }}</button>
+        <button class="btn btn-outline-danger disabled">Paused: {{ status[4] }}</button>
+
+      </div>
+      <div class="card-body" *ngIf="getCheckUser()">
+        <button class="btn btn-primary " routerLink="editShow">Edit</button>
+        <button class="btn btn-success" *ngIf="!inMyShows" (click)="addToMyShows(show._id)">Add To My Shows</button>
+        <button class="btn btn-danger" *ngIf="inMyShows" (click)="removeFromMyShows(show._id)">Remove From My Shows</button>
+
+      </div>
+    </div> <!-- //end card -->
+    <br>
+    <div class="row card">
+      <div class="card-body">
+        <h5 class="card-title">Reviews: <button class="btn btn-sm btn-primary float-right" (click)="showReviews()">+</button></h5>
+      </div>
+
+      <div class="card-body" *ngIf="show_reviews">
+        <ul class="list-group list-group-flush" *ngFor="let review of reviews; ">
+          <li class="list-group-item">
+            <div class="card">
+              <div class="card-header">
+                {{review.user_id.username}}
+              </div>
+              <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                  <p>{{review.review}}</p>
+                  <footer class="blockquote-footer"> <cite title="Source Title"> rating:</cite> {{review.rating}} </footer>
+                  <footer class="blockquote-footer"> <cite title="Source Title"> status:</cite> {{convertStatus(review.status)}} </footer>
+                </blockquote>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <br>
+    <div class="row card" *ngIf="getCheckUser()">
+      <!-- REVIEW:  -->
+      <br>
+      <div class="col-sm-12">
+        <h5 class="card-title">My Feedback</h5>
+        <form (ngSubmit)="f.form.valid && updateMyShows()" #f="ngForm">
+          <div class="form-group">
+            <label class="font-weight-bold" for="review"> Review: </label>
+            <textarea class="form-control" rows="3" name="text" placeholder="review of show" [(ngModel)]="myShow.review"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-12">
+        <form (ngSubmit)="f.form.valid && addRating()" #f="ngForm">
+          <div class="form-group">
+            <label class="font-weight-bold" for="review">My Ratings: {{myShow.rating}} </label>
+            <span class="font-weight-light"> (Required)</span>
+            <br>
+            <button type="button" class="btnrating btn" (click)="setRating(1)" [ngClass]="{'btn-default': myShow.rating < 1 , 'btn-warning': myShow.rating >= 1}">
+              <i class="fa fa-star" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btnrating btn" (click)="setRating(2)" [ngClass]="{'btn-default': myShow.rating < 2 , 'btn-warning': myShow.rating >= 2}">
+              <i class="fa fa-star" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btnrating btn" (click)="setRating(3)" [ngClass]="{'btn-default': myShow.rating < 3 , 'btn-warning': myShow.rating >= 3}">
+              <i class="fa fa-star" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btnrating btn" (click)="setRating(4)" [ngClass]="{'btn-default': myShow.rating < 4 , 'btn-warning': myShow.rating >= 4}">
+              <i class="fa fa-star" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btnrating btn" (click)="setRating(5)" [ngClass]="{'btn-default': myShow.rating < 5 , 'btn-warning': myShow.rating >= 5}">
+              <i class="fa fa-star" aria-hidden="true"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-12">
+        <form (ngSubmit)="f.form.valid && addRating()" #f="ngForm">
+          <div class="form-group">
+            <label class="font-weight-bold" for="review">Status</label>
+            <span class="font-weight-light"> (Required)</span>
+            <br>
+            <button type="button" class="btnrating btn" (click)="setStatus(1)" [ngClass]="{'btn-default': myShow.status != 1 , 'btn-success': myShow.status == 1}">
+              Completed
+            </button>
+            <button type="button" class="btnrating btn" (click)="setStatus(2)" [ngClass]="{'btn-default': myShow.rating != 2 , 'btn-primary': myShow.status == 2}">
+              Planning
+            </button>
+            <button type="button" class="btnrating btn" (click)="setStatus(3)" [ngClass]="{'btn-default': myShow.status != 3 , 'btn-info': myShow.status == 3}">
+              Current
+            </button>
+            <button type="button" class="btnrating btn" (click)="setStatus(4)" [ngClass]="{'btn-default': myShow.status != 4 , 'btn-warning': myShow.status == 4}">
+              Dropped
+            </button>
+            <button type="button" class="btnrating btn" (click)="setStatus(5)" [ngClass]="{'btn-default': myShow.status != 5 , 'btn-danger': myShow.status == 5}">
+              Paused
+            </button>
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary shadow">Save</button>
+            </div>
+            <p class="alert alert-success text-center" *ngIf="updatedTimeout"> <strong>Saved Your Response</strong> </p>
+            <p class="alert alert-danger text-center" *ngIf="error"> <strong>{{errorMsg}}</strong> </p>
+          </div>
+        </form>
+      </div>
+    </div><!-- end rating:  row -->
+  </div>
+</div>

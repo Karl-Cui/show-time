@@ -1,0 +1,76 @@
+<div class="row justify-content-center">
+  <h1>Add New TV Show</h1>
+</div>
+
+<div class="row justify-content-center">
+  <form id="new-show-form" (ngSubmit)="f.form.valid && addNewShow()" #f="ngForm">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" required [(ngModel)]="show.title" name="title">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea type="text" class="form-control" id="description" required [(ngModel)]="show.description" name="description">
+      </textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="image">Image</label>
+      <br>
+      <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+      <!-- required [(ngModel)]="model.img" name="image"> -->
+    </div>
+
+    <div class="form-group">
+      <label for="link">Link</label>
+      <input type="text" class="form-control" id="link" [(ngModel)]="show.link" name="link">
+    </div>
+
+    <div class="form-group">
+      <label for="link"><strong>Airing Date</strong></label>
+      <br>
+      <label for="hourSelect">Hour: </label>
+      <select class="form-control p-2" id="hourSelect" required [(ngModel)]="date.hour" name="hour">
+        <option *ngFor="let hour of hours">{{hour}}</option>
+      </select>
+      <br>
+      <label for="hourSelect">Day: </label>
+      <select class="form-control p-2" id="daySelect" required [(ngModel)]="date.day" name="day">
+        <option *ngFor="let day of days">{{day}}</option>
+      </select>
+      <br>
+      <label for="hourSelect">Month: </label>
+      <select class="form-control p-2" id="monthSelect" required [(ngModel)]="date.month" name="month">
+        <option *ngFor="let month of months">{{month}}</option>
+      </select>
+      <br>
+      <label for="hourSelect">Year: </label>
+      <select class="form-control p-2" id="yearSelect" required [(ngModel)]="date.year" name="year">
+        <option *ngFor="let year of years">{{year}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="checkboxAiringInterval">Airing Interval (Days)</label>
+      <input type="number" class="form-control" id="interval" required [(ngModel)]="show.airInterval" name="airInterval">
+    </div>
+
+    <button type="button" class="btn btn-success btn-s"
+      (click)="uploader.uploadAll()"
+      *ngIf="uploader.getNotUploadedItems().length"
+      [disabled]="!f.form.valid">
+          Submit with Image
+    </button>
+
+    <button type="submit" class="btn btn-success"
+      *ngIf="!uploader.getNotUploadedItems().length"
+      [disabled]="!f.form.valid">
+      Submit
+    </button>
+
+    <p class="alert alert-success text-center" *ngIf="popup && !currentUser.is_admin"> <strong>Your show has been requested. Waiting for admin approval.</strong> </p>
+    <p class="alert alert-success text-center" *ngIf="popup && currentUser.is_admin"> <strong>Added new show</strong> </p>
+    <p class="alert alert-danger text-center" *ngIf="error"> <strong>{{errorMsg}}</strong> </p>
+  </form>
+<div>

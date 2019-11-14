@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-10 col-sm-8 col-md-4 col-lg-4 col-xl-3" id="account-info">
+      <div>
+        <img id="profile-pic" src={{user.img}} alt="profile pic">
+      </div>
+      <br>
+      <div>
+        <h2>{{user.username}}</h2>
+      </div>
+      <div>
+        <h6>{{user.email}}</h6>
+      </div>
+      <br>
+      <div>
+        {{user.bio}}
+      </div>
+    </div>
+
+    <div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3" id="change-account-info">
+      <h2>Account Settings</h2>
+      <br>
+
+      <form (ngSubmit)="updateUserInfo()" #f="ngForm">
+
+        <div class="form-group">
+          <label class="font-weight-bold" for="img"> Change display picture </label>
+          <br>
+          <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+        </div>
+
+        <div class="form-group">
+          <label class="font-weight-bold" for="email"> Change email </label>
+          <input type="text" class="form-control" name="email" placeholder="New email" [(ngModel)]="updatedInfo.email" #username="ngModel">
+        </div>
+
+        <div class="form-group">
+          <label class="font-weight-bold" for="password"> Change password </label>
+          <input type="password" class="form-control" name="password" placeholder="New password" [(ngModel)]="updatedInfo.password" #password="ngModel">
+        </div>
+
+        <div class="form-group">
+          <label class="font-weight-bold" for="bio"> Change bio </label>
+          <textarea id="bio-form" type="text" class="form-control" name="bio" [(ngModel)]="updatedInfo.bio" #password="ngModel"></textarea>
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn-primary shadow" (click)="uploader.uploadAll()">Confirm changes</button>
+          <button type="reset" class="btn btn-primary shadow">Discard changes</button>
+        </div>
+        <p class="alert alert-danger text-center" *ngIf="error"> <strong>{{errorMsg}}</strong> </p>
+        <p class="alert alert-success text-center" *ngIf="success"> <strong>{{successMsg}}</strong> </p>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<h1>User List</h1>
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let user of users">
+      <div class="d-flex">
+        <div class="p-2 flex-grow-1">
+          <h4><span *ngIf="user.is_admin"><i class="fa fa-institution"></i> • </span>{{user.username}}</h4>
+          {{user.email}}
+        </div>
+        <div id="admin-user-options" *ngIf="!user.is_admin" class="p-2 btn-group-vertical" role="group" aria-label="User Options">
+          <button *ngIf="!user.is_banned" type="button" class="btn btn-block btn-success" (click)="promoteUser(user)">Promote User</button>
+
+          <button *ngIf="user.is_banned" type="button" class="btn btn-block btn-warning" (click)="unbanUser(user)">Unban User</button>
+          <button *ngIf="!user.is_banned" type="button" class="btn btn-block btn-danger" (click)="banUser(user)">Ban User</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
